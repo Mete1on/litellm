@@ -3146,9 +3146,11 @@ class BudgetConfig(BaseModel):
     budget_duration: Optional[str] = None
     tpm_limit: Optional[int] = None
     rpm_limit: Optional[int] = None
+    budget_max_tokens: Optional[float] = None
+    budget_max_requests: Optional[float] = None
+    budget_reset_time: Optional[str] = None
     max_tokens: Optional[float] = None
     max_requests: Optional[float] = None
-    budget_reset_time: Optional[str] = None
 
     def __init__(self, **data: Any) -> None:
         # Map time_period to budget_duration if present
@@ -3158,6 +3160,12 @@ class BudgetConfig(BaseModel):
         # Map budget_limit to max_budget if present
         if "budget_limit" in data:
             data["max_budget"] = data.pop("budget_limit")
+
+        # Backward compatibility: map max_tokens/max_requests to budget_max_tokens/budget_max_requests
+        if "max_tokens" in data and "budget_max_tokens" not in data:
+            data["budget_max_tokens"] = data["max_tokens"]
+        if "max_requests" in data and "budget_max_requests" not in data:
+            data["budget_max_requests"] = data["max_requests"]
 
         super().__init__(**data)
 

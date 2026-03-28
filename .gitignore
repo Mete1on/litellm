@@ -102,3 +102,8 @@ STABILIZATION_TODO.md
 **/playwright-report
 **/*.storageState.json
 **/coverage
+
+# User-specific configuration files with API keys
+final_*.yaml
+*_config.yaml
+test_*.py

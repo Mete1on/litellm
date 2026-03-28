@@ -328,22 +328,22 @@ class RouterBudgetLimiting(CustomLogger):
                             is_within_budget = False
                     
                     # Check token budget
-                    if is_within_budget and config.max_tokens is not None:
+                    if is_within_budget and config.budget_max_tokens is not None:
                         current_tokens = spend_map.get(
                             f"provider_tokens:{provider}:{config.budget_duration}", 0.0
                         )
-                        if current_tokens >= config.max_tokens:
-                            debug_msg = f"Exceeded token budget for provider {provider}: {current_tokens} >= {config.max_tokens}"
+                        if current_tokens >= config.budget_max_tokens:
+                            debug_msg = f"Exceeded token budget for provider {provider}: {current_tokens} >= {config.budget_max_tokens}"
                             deployment_above_budget_info += f"{debug_msg}\n"
                             is_within_budget = False
                     
                     # Check request count budget
-                    if is_within_budget and config.max_requests is not None:
+                    if is_within_budget and config.budget_max_requests is not None:
                         current_requests = spend_map.get(
                             f"provider_requests:{provider}:{config.budget_duration}", 0.0
                         )
-                        if current_requests >= config.max_requests:
-                            debug_msg = f"Exceeded request budget for provider {provider}: {current_requests} >= {config.max_requests}"
+                        if current_requests >= config.budget_max_requests:
+                            debug_msg = f"Exceeded request budget for provider {provider}: {current_requests} >= {config.budget_max_requests}"
                             deployment_above_budget_info += f"{debug_msg}\n"
                             is_within_budget = False
                     
@@ -371,23 +371,23 @@ class RouterBudgetLimiting(CustomLogger):
                             is_within_budget = False
                     
                     # Check token budget
-                    if is_within_budget and config.max_tokens is not None:
+                    if is_within_budget and config.budget_max_tokens is not None:
                         current_tokens = spend_map.get(
                             f"deployment_tokens:{model_id}:{config.budget_duration}", 0.0
                         )
-                        if current_tokens >= config.max_tokens:
-                            debug_msg = f"Exceeded token budget for deployment model_name: {_model_name}, litellm_params.model: {_litellm_model_name}, model_id: {model_id}: {current_tokens} >= {config.max_tokens}"
+                        if current_tokens >= config.budget_max_tokens:
+                            debug_msg = f"Exceeded token budget for deployment model_name: {_model_name}, litellm_params.model: {_litellm_model_name}, model_id: {model_id}: {current_tokens} >= {config.budget_max_tokens}"
                             verbose_router_logger.debug(debug_msg)
                             deployment_above_budget_info += f"{debug_msg}\n"
                             is_within_budget = False
                     
                     # Check request count budget
-                    if is_within_budget and config.max_requests is not None:
+                    if is_within_budget and config.budget_max_requests is not None:
                         current_requests = spend_map.get(
                             f"deployment_requests:{model_id}:{config.budget_duration}", 0.0
                         )
-                        if current_requests >= config.max_requests:
-                            debug_msg = f"Exceeded request budget for deployment model_name: {_model_name}, litellm_params.model: {_litellm_model_name}, model_id: {model_id}: {current_requests} >= {config.max_requests}"
+                        if current_requests >= config.budget_max_requests:
+                            debug_msg = f"Exceeded request budget for deployment model_name: {_model_name}, litellm_params.model: {_litellm_model_name}, model_id: {model_id}: {current_requests} >= {config.budget_max_requests}"
                             verbose_router_logger.debug(debug_msg)
                             deployment_above_budget_info += f"{debug_msg}\n"
                             is_within_budget = False
@@ -412,25 +412,25 @@ class RouterBudgetLimiting(CustomLogger):
                                 is_within_budget = False
                         
                         # Check token budget
-                        if is_within_budget and _tag_budget_config.max_tokens is not None:
+                        if is_within_budget and _tag_budget_config.budget_max_tokens is not None:
                             _tag_tokens = spend_map.get(
                                 f"tag_tokens:{_tag}:{_tag_budget_config.budget_duration}",
                                 0.0,
                             )
-                            if _tag_tokens >= _tag_budget_config.max_tokens:
-                                debug_msg = f"Exceeded token budget for tag='{_tag}', tag_tokens={_tag_tokens}, tag_token_limit={_tag_budget_config.max_tokens}"
+                            if _tag_tokens >= _tag_budget_config.budget_max_tokens:
+                                debug_msg = f"Exceeded token budget for tag='{_tag}', tag_tokens={_tag_tokens}, tag_token_limit={_tag_budget_config.budget_max_tokens}"
                                 verbose_router_logger.debug(debug_msg)
                                 deployment_above_budget_info += f"{debug_msg}\n"
                                 is_within_budget = False
                         
                         # Check request count budget
-                        if is_within_budget and _tag_budget_config.max_requests is not None:
+                        if is_within_budget and _tag_budget_config.budget_max_requests is not None:
                             _tag_requests = spend_map.get(
                                 f"tag_requests:{_tag}:{_tag_budget_config.budget_duration}",
                                 0.0,
                             )
-                            if _tag_requests >= _tag_budget_config.max_requests:
-                                debug_msg = f"Exceeded request budget for tag='{_tag}', tag_requests={_tag_requests}, tag_request_limit={_tag_budget_config.max_requests}"
+                            if _tag_requests >= _tag_budget_config.budget_max_requests:
+                                debug_msg = f"Exceeded request budget for tag='{_tag}', tag_requests={_tag_requests}, tag_request_limit={_tag_budget_config.budget_max_requests}"
                                 verbose_router_logger.debug(debug_msg)
                                 deployment_above_budget_info += f"{debug_msg}\n"
                                 is_within_budget = False
@@ -482,11 +482,11 @@ class RouterBudgetLimiting(CustomLogger):
                         cache_keys.append(
                             f"provider_spend:{provider}:{budget_config.budget_duration}"
                         )
-                        if budget_config.max_tokens is not None:
+                        if budget_config.budget_max_tokens is not None:
                             cache_keys.append(
                                 f"provider_tokens:{provider}:{budget_config.budget_duration}"
                             )
-                        if budget_config.max_requests is not None:
+                        if budget_config.budget_max_requests is not None:
                             cache_keys.append(
                                 f"provider_requests:{provider}:{budget_config.budget_duration}"
                             )
@@ -501,11 +501,11 @@ class RouterBudgetLimiting(CustomLogger):
                         cache_keys.append(
                             f"deployment_spend:{model_id}:{budget_config.budget_duration}"
                         )
-                        if budget_config.max_tokens is not None:
+                        if budget_config.budget_max_tokens is not None:
                             cache_keys.append(
                                 f"deployment_tokens:{model_id}:{budget_config.budget_duration}"
                             )
-                        if budget_config.max_requests is not None:
+                        if budget_config.budget_max_requests is not None:
                             cache_keys.append(
                                 f"deployment_requests:{model_id}:{budget_config.budget_duration}"
                             )
@@ -520,11 +520,11 @@ class RouterBudgetLimiting(CustomLogger):
                         cache_keys.append(
                             f"tag_spend:{_tag}:{_tag_budget_config.budget_duration}"
                         )
-                        if _tag_budget_config.max_tokens is not None:
+                        if _tag_budget_config.budget_max_tokens is not None:
                             cache_keys.append(
                                 f"tag_tokens:{_tag}:{_tag_budget_config.budget_duration}"
                             )
-                        if _tag_budget_config.max_requests is not None:
+                        if _tag_budget_config.budget_max_requests is not None:
                             cache_keys.append(
                                 f"tag_requests:{_tag}:{_tag_budget_config.budget_duration}"
                             )
@@ -586,6 +586,7 @@ class RouterBudgetLimiting(CustomLogger):
         current_time: float,
         response_cost: float,
         ttl_seconds: int,
+        budget_config: Optional[GenericBudgetInfo] = None,
     ) -> float:
         """
         Handle start of new budget window by resetting spend and start time
@@ -599,13 +600,21 @@ class RouterBudgetLimiting(CustomLogger):
         - stores key: `provider_budget_start_time:{provider}`, value: current_time.
             This stores the start time of the new budget window
         """
+        # Determine the correct start time
+        if budget_config and budget_config.budget_reset_time:
+            start_time = _calculate_fixed_reset_start_time(
+                current_time, budget_config.budget_reset_time
+            )
+        else:
+            start_time = current_time
+
         await self.dual_cache.async_set_cache(
             key=spend_key, value=response_cost, ttl=ttl_seconds
         )
         await self.dual_cache.async_set_cache(
-            key=start_time_key, value=current_time, ttl=ttl_seconds
+            key=start_time_key, value=start_time, ttl=ttl_seconds
         )
-        return current_time
+        return start_time
 
     async def _increment_spend_in_current_window(
         self, spend_key: str, response_cost: float, ttl: int
@@ -667,7 +676,7 @@ class RouterBudgetLimiting(CustomLogger):
             )
             
             # increment tokens for provider
-            if budget_config.max_tokens is not None:
+            if budget_config.budget_max_tokens is not None:
                 tokens_key = (
                     f"provider_tokens:{custom_llm_provider}:{budget_config.budget_duration}"
                 )
@@ -679,7 +688,7 @@ class RouterBudgetLimiting(CustomLogger):
                 )
             
             # increment requests for provider
-            if budget_config.max_requests is not None:
+            if budget_config.budget_max_requests is not None:
                 requests_key = (
                     f"provider_requests:{custom_llm_provider}:{budget_config.budget_duration}"
                 )
@@ -703,7 +712,7 @@ class RouterBudgetLimiting(CustomLogger):
             )
             
             # increment tokens for deployment
-            if deployment_budget_config.max_tokens is not None:
+            if deployment_budget_config.budget_max_tokens is not None:
                 deployment_tokens_key = f"deployment_tokens:{model_id}:{deployment_budget_config.budget_duration}"
                 await self._increment_spend_for_key(
                     budget_config=deployment_budget_config,
@@ -713,7 +722,7 @@ class RouterBudgetLimiting(CustomLogger):
                 )
             
             # increment requests for deployment
-            if deployment_budget_config.max_requests is not None:
+            if deployment_budget_config.budget_max_requests is not None:
                 deployment_requests_key = f"deployment_requests:{model_id}:{deployment_budget_config.budget_duration}"
                 await self._increment_spend_for_key(
                     budget_config=deployment_budget_config,
@@ -739,7 +748,7 @@ class RouterBudgetLimiting(CustomLogger):
                     )
                     
                     # increment tokens for tag
-                    if _tag_budget_config.max_tokens is not None:
+                    if _tag_budget_config.budget_max_tokens is not None:
                         _tag_tokens_key = (
                             f"tag_tokens:{_tag}:{_tag_budget_config.budget_duration}"
                         )
@@ -751,7 +760,7 @@ class RouterBudgetLimiting(CustomLogger):
                         )
                     
                     # increment requests for tag
-                    if _tag_budget_config.max_requests is not None:
+                    if _tag_budget_config.budget_max_requests is not None:
                         _tag_requests_key = (
                             f"tag_requests:{_tag}:{_tag_budget_config.budget_duration}"
                         )
@@ -801,6 +810,7 @@ class RouterBudgetLimiting(CustomLogger):
                 current_time=current_time,
                 response_cost=response_cost,
                 ttl_seconds=ttl_seconds,
+                budget_config=budget_config,
             )
         elif window_expired:
             # Budget window expired - reset everything
@@ -811,6 +821,7 @@ class RouterBudgetLimiting(CustomLogger):
                 current_time=current_time,
                 response_cost=response_cost,
                 ttl_seconds=ttl_seconds,
+                budget_config=budget_config,
             )
         else:
             # Within existing window - increment spend
@@ -1125,8 +1136,8 @@ class RouterBudgetLimiting(CustomLogger):
                         time_period=config.get("time_period"),
                         max_budget=config.get("max_budget"),
                         budget_duration=config.get("budget_duration"),
-                        max_tokens=config.get("max_tokens"),
-                        max_requests=config.get("max_requests"),
+                        budget_max_tokens=config.get("budget_max_tokens") or config.get("max_tokens"),
+                        budget_max_requests=config.get("budget_max_requests") or config.get("max_requests"),
                         budget_reset_time=config.get("budget_reset_time"),
                     )
                 asyncio.create_task(
@@ -1154,18 +1165,18 @@ class RouterBudgetLimiting(CustomLogger):
             _model_id = _model_info.get("id")
             _max_budget = _litellm_params.get("max_budget")
             _budget_duration = _litellm_params.get("budget_duration")
-            _max_tokens = _litellm_params.get("max_tokens")
-            _max_requests = _litellm_params.get("max_requests")
+            _budget_max_tokens = _litellm_params.get("budget_max_tokens") or _litellm_params.get("max_tokens")
+            _budget_max_requests = _litellm_params.get("budget_max_requests") or _litellm_params.get("max_requests")
             _budget_reset_time = _litellm_params.get("budget_reset_time")
 
             verbose_router_logger.debug(
-                f"Init Deployment Budget: max_budget: {_max_budget}, budget_duration: {_budget_duration}, max_tokens: {_max_tokens}, max_requests: {_max_requests}, budget_reset_time: {_budget_reset_time}, model_id: {_model_id}"
+                f"Init Deployment Budget: max_budget: {_max_budget}, budget_duration: {_budget_duration}, budget_max_tokens: {_budget_max_tokens}, budget_max_requests: {_budget_max_requests}, budget_reset_time: {_budget_reset_time}, model_id: {_model_id}"
             )
             
             has_any_budget = (
                 (_max_budget is not None and _budget_duration is not None) or
-                (_max_tokens is not None and _budget_duration is not None) or
-                (_max_requests is not None and _budget_duration is not None)
+                (_budget_max_tokens is not None and _budget_duration is not None) or
+                (_budget_max_requests is not None and _budget_duration is not None)
             )
             
             if has_any_budget and _model_id is not None:
@@ -1174,8 +1185,8 @@ class RouterBudgetLimiting(CustomLogger):
                     budget_limit=_max_budget,
                     max_budget=_max_budget,
                     budget_duration=_budget_duration,
-                    max_tokens=_max_tokens,
-                    max_requests=_max_requests,
+                    budget_max_tokens=_budget_max_tokens,
+                    budget_max_requests=_budget_max_requests,
                     budget_reset_time=_budget_reset_time,
                 )
                 if self.deployment_budget_config is None:
